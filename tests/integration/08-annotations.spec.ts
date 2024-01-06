@@ -47,7 +47,7 @@ test.describe('Annotations', () => {
 */
 
 
-    test('Annotations - Step', async ({page}) => {
+    test('Annotations - Step @smoke', async ({page}) => {
 
         const paragraphs = await page.locator('[data-identifier="Paragraphs"] > p').all()
 

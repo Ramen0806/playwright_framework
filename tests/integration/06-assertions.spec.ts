@@ -1,13 +1,13 @@
-import {test, expect} from "@playwright/test";
-import { clickLink } from "../../helpers/clickHelpers";
-import exp from "constants";
+import { test, expect } from '@playwright/test'
+import { clickLink } from '../../helpers/clickHelpers'
+// import exp from 'constants'
 
-test.describe("Assertions", () => {
+test.describe('Assertions', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("https://techglobal-training.com/frontend");
+    await page.goto('https://techglobal-training.com/frontend')
 
-    await clickLink(page, "Html Elements");
-  });
+    await clickLink(page, 'Html Elements')
+  })
 
   test('Auto-retry, web-first async locator assertions', async ({ page }) => {
     const mainHeading = page.locator('#main_heading')
@@ -40,7 +40,6 @@ test.describe("Assertions", () => {
 
     const textInput = page.locator('#text_input1')
 
-
     await expect(textInput).toBeEmpty()
 
     await textInput.fill('TechGlobal')
@@ -59,7 +58,6 @@ test.describe("Assertions", () => {
   })
 
   test('Non-retry Assertions', async () => {
-
     const num = 1
 
     expect(num).toBe(1)
@@ -74,10 +72,9 @@ test.describe("Assertions", () => {
   })
 
   test('Creating custom assertion', async ({ page }) => {
+    await page.goto('https://techglobal-training.com/frontend')
 
-    await page.goto("https://techglobal-training.com/frontend");
-
-    await clickLink(page, "Infinite Scroll");
+    await clickLink(page, 'Infinite Scroll')
 
     const articles = page.locator('.infinite-scroll-component > div')
     const articlesCount = await articles.count()
@@ -86,20 +83,18 @@ test.describe("Assertions", () => {
 
     await articles.last().scrollIntoViewIfNeeded()
 
-    const newCount = await articles.count()
-
+    // const newCount = await articles.count()
 
     await expect(async () => {
-        const newCount = await articles.count()
-        console.log('Trying here!' + newCount)
-        expect(newCount).toBeGreaterThan(articlesCount)
+      const newCount = await articles.count()
+      console.log('Trying here!' + newCount)
+      expect(newCount).toBeGreaterThan(articlesCount)
     }).toPass({
-        timeout: 3000,
+      timeout: 3000,
     })
   })
 
-
-  test('Soft Assertions', async({ page }) => {
+  test('Soft Assertions', async ({ page }) => {
     const mainHeading = page.locator('#main_heading')
 
     // Flaky Assertion here - means; sometime fails, sometime passes. So it's inconsistent.
@@ -107,37 +102,34 @@ test.describe("Assertions", () => {
 
     const checkBoxGroup2 = await page.locator('#checkbox-button-group input').all()
 
-    for(const check of checkBoxGroup2) {
-        await check.check()
-        console.log('Chechked')
-        await expect(check).toBeChecked()
+    for (const check of checkBoxGroup2) {
+      await check.check()
+      console.log('Chechked')
+      await expect(check).toBeChecked()
     }
-
   })
-  test('IFrames - Switching to an IFrame', async ({page}) => {
-    await page.goto('https://techglobal-training.com/frontend/');
+  test('IFrames - Switching to an IFrame', async ({ page }) => {
+    await page.goto('https://techglobal-training.com/frontend/')
 
-    await clickLink(page, "IFrames");
+    await clickLink(page, 'IFrames')
 
     const frameLocator = page.frameLocator('#form_frame')
-  
+
     const inputFields = frameLocator.locator('#first_name, #last_name')
     const inputFieldsCount = await inputFields.count()
-    
+
     const submitBtn = frameLocator.locator('#submit')
     const result = page.locator('#result')
 
     const firstName = 'John'
     const lastName = 'Doe'
-    
-    for(let i = 0; i < inputFieldsCount; i++){
-        await inputFields.nth(i).fill(i == 0 ? firstName : lastName)
+
+    for (let i = 0; i < inputFieldsCount; i++) {
+      await inputFields.nth(i).fill(i == 0 ? firstName : lastName)
     }
-   
+
     await submitBtn.click()
 
     await expect(result).toHaveText(`You entered: ${firstName} ${lastName}`)
-
-
   })
 })

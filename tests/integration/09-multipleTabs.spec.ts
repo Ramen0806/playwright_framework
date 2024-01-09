@@ -1,15 +1,14 @@
-import {test, expect} from "@playwright/test";
-import { clickLink } from "../../helpers/clickHelpers";
+import { test, expect } from '@playwright/test'
+import { clickLink } from '../../helpers/clickHelpers'
 
-test.describe("Assertions", () => {
+test.describe('Assertions', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("https://techglobal-training.com/frontend");
+    await page.goto('https://techglobal-training.com/frontend')
 
-    await clickLink(page, "Multiple Windows");
-  });
+    await clickLink(page, 'Multiple Windows')
+  })
 
-  test('Creating a new tab', async ({page}) => {
-
+  test('Creating a new tab', async ({ page }) => {
     //use the existing 'page' to navigate to a URL in the new Tab
     const newTab = await page.context().newPage()
 
@@ -21,8 +20,7 @@ test.describe("Assertions", () => {
 
     await newTab.close()
   })
-  test('Creating a new tab 2', async ({page, context}) => {
-
+  test('Creating a new tab 2', async ({ context }) => {
     const newTab = await context.newPage()
 
     // use the new tab  to navigate to different URL
@@ -30,25 +28,16 @@ test.describe("Assertions", () => {
     await newTab.close()
   })
 
-  test.only('Interacting/Switching new tab', async ({page}) => {
-
-    
-    const [newTab] = await Promise.all([
-         page.waitForEvent('popup'),
-         clickLink(page, 'Apple')
-    ])
+  test.only('Interacting/Switching new tab', async ({ page }) => {
+    const [newTab] = await Promise.all([page.waitForEvent('popup'), clickLink(page, 'Apple')])
 
     await newTab.bringToFront()
-    
+
     await expect(newTab).toHaveTitle('Apple')
     await page.pause()
-    const [newTab2] = await Promise.all([
-        page.waitForEvent('popup'),
-        clickLink(page, 'Microsoft')
-    ])
+    const [newTab2] = await Promise.all([page.waitForEvent('popup'), clickLink(page, 'Microsoft')])
 
-    expect(newTab2).toHaveURL('https://www.microsoft.com/en-us/')
-
+    await expect(newTab2).toHaveURL('https://www.microsoft.com/en-us/')
   })
   /**
    * Go to https://techglobal-training.com/frontend/
@@ -58,18 +47,13 @@ test.describe("Assertions", () => {
    * Click on the "Tesla" link and validate URL contains "https://www.tesla.com/"
    */
 
-  test('Switching to new tab test case', async ({page}) => {
-
+  test('Switching to new tab test case', async ({ page }) => {
     const links = ['Apple', 'Microsoft', 'Tesla']
 
-    for (const link of links){
-        const [newTab] = await Promise.all([
-            page.waitForEvent('popup'),
-        clickLink(page, link)
-    ])
-    expect(newTab.url()).toContain(link.toLowerCase())    
-       await newTab.close()
+    for (const link of links) {
+      const [newTab] = await Promise.all([page.waitForEvent('popup'), clickLink(page, link)])
+      expect(newTab.url()).toContain(link.toLowerCase())
+      await newTab.close()
     }
-
   })
 })

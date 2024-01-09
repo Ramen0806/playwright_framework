@@ -1,29 +1,23 @@
-import {test, expect} from "@playwright/test";
-import { clickButton, clickLink } from "../../helpers/clickHelpers";
+import { test } from '@playwright/test'
+import { clickButton, clickLink } from '../../helpers/clickHelpers'
 
-test.describe("Assertions", () => {
+test.describe('Assertions', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("https://techglobal-training.com/frontend");
+    await page.goto('https://techglobal-training.com/frontend')
 
-    await clickLink(page, "Alerts");
-  });
+    await clickLink(page, 'Alerts')
+  })
 
-  test('Handling Dailogs', async ({page}) => {
-
-    page.on("dialog", async (dialog) => {
-        
-        if(dialog.type() === 'alert'){
-            await dialog.accept()
-            
-        }
-        else if(dialog.type() === 'confirm'){
-            await dialog.dismiss();
-        }
-        else{
-            await dialog.accept('Merryyy Christmas')
-        }
-        console.log(dialog.message())
-
+  test('Handling Dailogs', async ({ page }) => {
+    page.on('dialog', async (dialog) => {
+      if (dialog.type() === 'alert') {
+        await dialog.accept()
+      } else if (dialog.type() === 'confirm') {
+        await dialog.dismiss()
+      } else {
+        await dialog.accept('Merryyy Christmas')
+      }
+      console.log(dialog.message())
     })
     await clickButton(page, 'Warning Alert')
     await clickButton(page, 'Confirmation Alert')
